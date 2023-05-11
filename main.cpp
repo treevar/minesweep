@@ -84,50 +84,48 @@ int main(int argc, char **argv){
     while(run){
         mf.print();
         str = promptForStr("(f)lag, (u)nflag, (r)eveal, (q)uit");
-        if(str[0] == 'f'){
+        if(str[0] == 'q'){ run = 0; }
+        else{
             x = getX();
             y = getY();
-            mf.flagTile(x, y);
-            clearScreen();
-        }
-        else if(str[0] == 'u'){
-            x = getX();
-            y = getY();
-            mf.unFlagTile(x, y);
-            clearScreen();
-        }
-        else if(str[0] == 'r'){
-            unsigned int x = getX();
-            unsigned int y = getY();
-            if(mf.isRevealed(x, y)){
-                mf.autoReveal(x, y);
-                //if(mf.mineHit()){ run = 0; }
-            }
-            else if(!mf.isFlagged(x, y)){ mf.revealTile(x, y); }
-            if(mf.mineHit()){
-                str = "\tLOSER ";
-                gameOver = 1;
-            }
-            else if(mf.numHiddenTiles() == mf.numMines()){
-                str = "\tWINNER ";
-                gameOver = 1;
-            }
-            if(gameOver){
-                clearScreen();
-                std::cout << str;
-                printTime(startTime);
-                std::cout << '\n';
-                mf.revealAll();
-                mf.print();
-                mf.randomizeMineLocations();
-                startTime = std::chrono::system_clock::now();
-                gameOver = 0;
-            }
-            else{
+            if(str[0] == 'f'){
+                mf.flagTile(x, y);
                 clearScreen();
             }
+            else if(str[0] == 'u'){
+                mf.unFlagTile(x, y);
+                clearScreen();
+            }
+            else if(str[0] == 'r'){
+                if(mf.isRevealed(x, y)){
+                    mf.autoReveal(x, y);
+                    //if(mf.mineHit()){ run = 0; }
+                }
+                else if(!mf.isFlagged(x, y)){ mf.revealTile(x, y); }
+                if(mf.mineHit()){
+                    str = "\tLOSER ";
+                    gameOver = 1;
+                }
+                else if(mf.numHiddenTiles() == mf.numMines()){
+                    str = "\tWINNER ";
+                    gameOver = 1;
+                }
+                if(gameOver){
+                    clearScreen();
+                    std::cout << str;
+                    printTime(startTime);
+                    std::cout << '\n';
+                    mf.revealAll();
+                    mf.print();
+                    mf.randomizeMineLocations();
+                    startTime = std::chrono::system_clock::now();
+                    gameOver = 0;
+                }
+                else{
+                    clearScreen();
+                }
+            }
         }
-        else if(str[0] == 'q'){ run = 0; }
     }
     return 0;
 }
